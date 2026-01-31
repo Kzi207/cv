@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -14,7 +15,7 @@ import DonateSection from './components/DonateSection';
 import MagicCursor from './components/MagicCursor';
 import TechStack from './components/TechStack';
 import FpsCounter from './components/FpsCounter';
-import { PLAYLIST } from './constants';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 function App() {
   const [isCVOpen, setIsCVOpen] = useState(false);
@@ -54,52 +55,54 @@ function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 transition-colors duration-300 selection:bg-brand-500 selection:text-white">
-      
-      {/* Magic Cursor Feature */}
-      <MagicCursor />
-
-      <Header 
-        onOpenCV={() => setIsCVOpen(true)}
-        theme={theme} 
-        toggleTheme={toggleTheme} 
-      />
-      
-      <SettingsPanel 
-        theme={theme} 
-        toggleTheme={toggleTheme} 
-        currentTrackIndex={currentTrackIndex}
-        onTrackSelect={handleTrackChange}
-        isPlaying={isMusicPlaying}
-        onTogglePlay={handleTogglePlay}
-      />
-
-      <main>
-        <Hero onOpenCV={() => setIsCVOpen(true)} />
+    <LanguageProvider>
+      <div className="relative min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 transition-colors duration-300 selection:bg-brand-500 selection:text-white">
         
-        {/* Tech Stack Marquee */}
-        <TechStack />
+        {/* Magic Cursor Feature */}
+        <MagicCursor />
 
-        <div id="about"></div>
-        <FocusAreas />
-
-        <Skills />
-        <Projects />
+        <Header 
+          onOpenCV={() => setIsCVOpen(true)}
+          theme={theme} 
+          toggleTheme={toggleTheme} 
+        />
         
-        <CV isOpen={isCVOpen} onClose={() => setIsCVOpen(false)} />
-        
-        <DonateSection />
-        
-        <Contact />
-      </main>
+        <SettingsPanel 
+          theme={theme} 
+          toggleTheme={toggleTheme} 
+          currentTrackIndex={currentTrackIndex}
+          onTrackSelect={handleTrackChange}
+          isPlaying={isMusicPlaying}
+          onTogglePlay={handleTogglePlay}
+        />
 
-      <Footer />
+        <main>
+          <Hero onOpenCV={() => setIsCVOpen(true)} />
+          
+          {/* Tech Stack Marquee */}
+          <TechStack />
 
-      {/* Utilities */}
-      <Mascot isMusicPlaying={isMusicPlaying} />
-      <FpsCounter />
-      <BackToTop />
-    </div>
+          <div id="about"></div>
+          <FocusAreas />
+
+          <Skills />
+          <Projects />
+          
+          <CV isOpen={isCVOpen} onClose={() => setIsCVOpen(false)} />
+          
+          <DonateSection />
+          
+          <Contact />
+        </main>
+
+        <Footer />
+
+        {/* Utilities */}
+        <Mascot isMusicPlaying={isMusicPlaying} />
+        <FpsCounter />
+        <BackToTop />
+      </div>
+    </LanguageProvider>
   );
 }
 

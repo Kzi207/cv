@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { PERSONAL_INFO, LOVE_QUOTES } from '../constants';
 import { ChevronRight, Clock, Headphones } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface WelcomeScreenProps {
   onDismiss: () => void;
@@ -12,6 +14,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onStartMusic }
   const [isClosing, setIsClosing] = useState(false);
   const [fadeQuote, setFadeQuote] = useState(true);
   const [time, setTime] = useState(new Date());
+  const { t } = useLanguage();
 
   // Clock timer
   useEffect(() => {
@@ -91,7 +94,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onStartMusic }
         {/* Text Info */}
         <div className="space-y-4">
              <div className="inline-block px-3 py-1 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm text-brand-300 text-xs font-medium tracking-widest uppercase animate-fade-in-up">
-                Portfolio & CV
+                {t('welcome.tag')}
              </div>
              
              <h1 className="text-4xl md:text-6xl font-serif font-bold text-white drop-shadow-lg tracking-wide leading-tight animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
@@ -115,13 +118,13 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onStartMusic }
                 onClick={handleEnter}
                 className="group relative px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-3 overflow-hidden"
             >
-                <span className="relative z-10">Khám Phá Ngay</span>
+                <span className="relative z-10">{t('welcome.enter')}</span>
                 <ChevronRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
                 
                 {/* Button Shine Effect */}
                 <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12 group-hover:animate-[shimmer_1s_infinite]"></div>
             </button>
-            <p className="text-white/40 text-xs mt-4">Nhấn để truy cập và bật nhạc nền</p>
+            <p className="text-white/40 text-xs mt-4">{t('welcome.hint')}</p>
         </div>
 
       </div>
@@ -129,8 +132,8 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onStartMusic }
       {/* Footer Elements */}
       <div className="absolute bottom-8 w-full px-8 flex justify-between items-end text-white/60 text-xs font-mono z-10">
            <div className="flex flex-col gap-1">
-               <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div> System Online</span>
-               <span>Ver 2.0.1</span>
+               <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div> {t('welcome.system')}</span>
+               <span>{t('welcome.ver')}</span>
            </div>
 
            <div className="flex items-center gap-2 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/5">

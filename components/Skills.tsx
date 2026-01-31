@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { SKILLS } from '../constants';
 import { Terminal, Cpu, Globe, Server, GitBranch, Code2, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from './ScrollReveal';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const getSkillIcon = (name: string) => {
   if (name.includes("C/C++")) return <Terminal size={24} />;
@@ -13,16 +15,18 @@ const getSkillIcon = (name: string) => {
 };
 
 const Skills: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="skills" className="py-24 bg-white dark:bg-slate-900 relative transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <ScrollReveal variant="zoom">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-              Kỹ Năng <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-purple-500">Chuyên Môn</span>
+              {t('skills.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-purple-500">{t('skills.titleHighlight')}</span>
             </h2>
             <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-base">
-              Bộ công cụ và ngôn ngữ mình sử dụng để hiện thực hóa các ý tưởng.
+              {t('skills.subtitle')}
             </p>
           </div>
         </ScrollReveal>
@@ -47,7 +51,7 @@ const Skills: React.FC = () => {
                             <h3 className="font-bold text-slate-900 dark:text-white mb-1 group-hover:text-brand-500 transition-colors">{skill.name}</h3>
                             <div className="flex items-center justify-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-75">
                                 <CheckCircle2 size={12} className="text-green-500" />
-                                <span>Sử dụng tốt</span>
+                                <span>{t('skills.goodAt')}</span>
                             </div>
                         </div>
                         

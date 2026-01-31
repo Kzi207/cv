@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { Cpu, Database, Globe, Layers, Server, Smartphone, Terminal, Wifi, Code2, Cloud, Lock, Monitor } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const TECH_ITEMS = [
   { icon: Code2, label: "ReactJS" },
@@ -17,10 +19,11 @@ const TECH_ITEMS = [
 ];
 
 const TechStack: React.FC = () => {
+  const { t } = useLanguage();
   return (
     <section className="py-10 bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-slate-800 overflow-hidden">
       <div className="container mx-auto px-4 mb-6">
-        <p className="text-center text-xs font-bold uppercase tracking-widest text-slate-400">Công nghệ sử dụng</p>
+        <p className="text-center text-xs font-bold uppercase tracking-widest text-slate-400">{t('techStack.title')}</p>
       </div>
       
       <div className="relative flex overflow-x-hidden group">

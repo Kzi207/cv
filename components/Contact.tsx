@@ -1,44 +1,42 @@
+
 import React, { useState } from 'react';
 import { Send, Mail, CheckCircle, Github, Facebook, MessageCircle } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
 import ScrollReveal from './ScrollReveal';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success'>('idle');
+  const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
-    // Simulate API call
     setTimeout(() => {
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
-      // Reset success message after 3 seconds
       setTimeout(() => setStatus('idle'), 5000);
     }, 1500);
   };
 
   return (
     <section id="contact" className="py-20 bg-white dark:bg-slate-950 relative overflow-hidden transition-colors duration-300">
-      {/* Background decoration */}
       <div className="absolute top-1/2 left-0 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl -translate-y-1/2 animate-pulse"></div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <ScrollReveal>
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Liên Hệ <span className="text-brand-500">Với Mình</span></h2>
-            <p className="text-slate-600 dark:text-slate-400">Luôn sẵn sàng trao đổi về công nghệ, dự án và cơ hội hợp tác.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">{t('contact.title')} <span className="text-brand-500">{t('contact.titleHighlight')}</span></h2>
+            <p className="text-slate-600 dark:text-slate-400">{t('contact.subtitle')}</p>
           </div>
         </ScrollReveal>
 
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          {/* Info Side */}
           <ScrollReveal delay={100} className="space-y-8">
-            <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Thông tin liên lạc</h3>
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{t('contact.infoTitle')}</h3>
             <p className="text-slate-600 dark:text-slate-400">
-              Bạn có thể liên hệ trực tiếp qua email, số điện thoại hoặc nhắn tin qua các mạng xã hội. 
-              Mình sẽ cố gắng phản hồi sớm nhất có thể!
+              {t('contact.infoDesc')}
             </p>
 
             <div className="space-y-4">
@@ -66,7 +64,6 @@ const Contact: React.FC = () => {
             </div>
           </ScrollReveal>
 
-          {/* Form Side */}
           <ScrollReveal delay={200}>
             <div className="bg-slate-50 dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl dark:shadow-none hover:shadow-2xl transition-shadow duration-300">
               {status === 'success' ? (
@@ -74,13 +71,13 @@ const Contact: React.FC = () => {
                   <div className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mb-4">
                     <CheckCircle size={32} />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Đã gửi thành công!</h3>
-                  <p className="text-slate-600 dark:text-slate-400">Cảm ơn bạn đã liên hệ. Mình sẽ phản hồi sớm.</p>
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{t('contact.form.success')}</h3>
+                  <p className="text-slate-600 dark:text-slate-400">{t('contact.form.successDesc')}</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-400 mb-2">Họ tên</label>
+                    <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-400 mb-2">{t('contact.form.name')}</label>
                     <input 
                       type="text" 
                       id="name"
@@ -88,11 +85,11 @@ const Contact: React.FC = () => {
                       value={formData.name}
                       onChange={e => setFormData({...formData, name: e.target.value})}
                       className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors"
-                      placeholder="Tên của bạn"
+                      placeholder={t('contact.form.namePlaceholder')}
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-400 mb-2">Email</label>
+                    <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-400 mb-2">{t('contact.form.email')}</label>
                     <input 
                       type="email" 
                       id="email"
@@ -104,7 +101,7 @@ const Contact: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-slate-700 dark:text-slate-400 mb-2">Nội dung</label>
+                    <label htmlFor="message" className="block text-sm font-medium text-slate-700 dark:text-slate-400 mb-2">{t('contact.form.message')}</label>
                     <textarea 
                       id="message"
                       required
@@ -112,7 +109,7 @@ const Contact: React.FC = () => {
                       value={formData.message}
                       onChange={e => setFormData({...formData, message: e.target.value})}
                       className="w-full px-4 py-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors resize-none"
-                      placeholder="Lời nhắn của bạn..."
+                      placeholder={t('contact.form.messagePlaceholder')}
                     ></textarea>
                   </div>
                   <button 
@@ -124,7 +121,7 @@ const Contact: React.FC = () => {
                       <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
                     ) : (
                       <>
-                        Gửi tin nhắn <Send size={18} />
+                        {t('contact.form.send')} <Send size={18} />
                       </>
                     )}
                   </button>

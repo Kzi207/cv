@@ -1,3 +1,4 @@
+
 export interface Skill {
   name: string;
   level: number; // 0-100
@@ -6,7 +7,9 @@ export interface Skill {
 
 export interface Project {
   title: string;
+  title_en?: string;
   description: string;
+  description_en?: string;
   tags: string[];
   link?: string;
   github?: string;
@@ -22,8 +25,10 @@ export interface Track {
 export interface Education {
   school: string;
   degree: string;
+  degree_en?: string;
   year: string;
   description: string;
+  description_en?: string;
 }
 
 export interface ContactFormState {
@@ -35,21 +40,27 @@ export interface ContactFormState {
 export interface TimelineItem {
   year: string;
   title: string;
+  title_en?: string;
   description: string;
+  description_en?: string;
   icon?: 'school' | 'code' | 'work' | 'star';
 }
 
 export interface AboutTab {
   id: string;
   label: string;
+  label_en?: string;
   icon: any; // Lucide icon component
   content: string;
+  content_en?: string;
 }
 
 export interface FocusArea {
   id: string;
   title: string;
+  title_en?: string;
   description: string;
+  description_en?: string;
   icon: any; // Lucide icon
   color: string;
 }

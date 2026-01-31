@@ -1,9 +1,12 @@
+
 import React, { useState } from 'react';
 import { Copy, Check, Heart, Coffee, Sparkles } from 'lucide-react';
 import ScrollReveal from './ScrollReveal';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const DonateSection: React.FC = () => {
   const [copied, setCopied] = useState(false);
+  const { t } = useLanguage();
 
   const BANK_INFO = {
     bankId: 'vcb',
@@ -32,13 +35,13 @@ const DonateSection: React.FC = () => {
         <ScrollReveal>
           <div className="text-center mb-10">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 text-xs font-bold uppercase tracking-wider mb-4">
-              <Heart size={12} className="fill-current" /> Support Me
+              <Heart size={12} className="fill-current" /> {t('donate.support')}
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-              Mời Duy Ly <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-600">Cà Phê</span>
+              {t('donate.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-600">{t('donate.titleHighlight')}</span>
             </h2>
             <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-              Nếu bạn thấy profile này thú vị hoặc hữu ích, hãy ủng hộ mình một ly cà phê nhé! Đó là động lực lớn để mình tạo ra nhiều sản phẩm hay hơn nữa.
+              {t('donate.desc')}
             </p>
           </div>
         </ScrollReveal>
@@ -56,14 +59,14 @@ const DonateSection: React.FC = () => {
                 />
               </div>
               <p className="mt-4 text-xs font-mono text-slate-400 flex items-center gap-1">
-                <Sparkles size={12} /> Quét mã QR để chuyển khoản nhanh
+                <Sparkles size={12} /> VietQR
               </p>
             </div>
 
             {/* Right Side: Info */}
             <div className="md:w-1/2 p-8 md:p-10 flex flex-col justify-center space-y-6">
               <div className="space-y-1">
-                <p className="text-sm text-slate-500 font-medium uppercase tracking-wide">Ngân hàng</p>
+                <p className="text-sm text-slate-500 font-medium uppercase tracking-wide">{t('donate.bank')}</p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-white rounded-lg shadow-sm border border-slate-100 p-1 flex items-center justify-center overflow-hidden">
                     <img src="https://img.vietqr.io/image/vcb-logo.png" alt="VCB" className="w-full object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
@@ -73,12 +76,12 @@ const DonateSection: React.FC = () => {
               </div>
 
               <div className="space-y-1">
-                <p className="text-sm text-slate-500 font-medium uppercase tracking-wide">Chủ tài khoản</p>
+                <p className="text-sm text-slate-500 font-medium uppercase tracking-wide">{t('donate.owner')}</p>
                 <p className="text-lg font-semibold text-slate-800 dark:text-slate-200">{BANK_INFO.accountName}</p>
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm text-slate-500 font-medium uppercase tracking-wide">Số tài khoản</p>
+                <p className="text-sm text-slate-500 font-medium uppercase tracking-wide">{t('donate.account')}</p>
                 <div className="flex items-center gap-3">
                   <code className="text-2xl md:text-3xl font-mono font-bold text-brand-600 dark:text-brand-400 tracking-wider">
                     {BANK_INFO.accountNo}
@@ -90,14 +93,14 @@ const DonateSection: React.FC = () => {
                         ? 'bg-green-500 text-white hover:bg-green-600' 
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-brand-500 hover:text-white'
                     }`}
-                    title="Sao chép số tài khoản"
+                    title={t('donate.copy')}
                   >
                     {copied ? <Check size={20} /> : <Copy size={20} />}
                   </button>
                 </div>
                 {copied && (
                   <p className="text-sm text-green-500 font-medium animate-fade-in-up flex items-center gap-1">
-                    <Check size={14} /> Đã sao chép vào bộ nhớ tạm!
+                    <Check size={14} /> {t('donate.copied')}
                   </p>
                 )}
               </div>
@@ -109,7 +112,7 @@ const DonateSection: React.FC = () => {
                   rel="noreferrer"
                   className="inline-flex items-center justify-center gap-2 w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl hover:opacity-90 transition-opacity"
                 >
-                  <Coffee size={18} /> Tải mã QR
+                  <Coffee size={18} /> {t('donate.downloadQR')}
                 </a>
               </div>
             </div>

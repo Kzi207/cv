@@ -1,24 +1,21 @@
+
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Code2, Sun, Moon, Coffee } from 'lucide-react';
+import { Menu, X, Code2, Sun, Moon, Coffee, Globe } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
-const NAV_ITEMS = [
-  { label: 'Trang chủ', href: '#home' },
-  { label: 'Giới thiệu', href: '#about' },
-  { label: 'Kỹ năng', href: '#skills' },
-  { label: 'Dự án', href: '#projects' },
-  { label: 'CV Online', href: '#cv' },
-  { label: 'Liên hệ', href: '#contact' },
-];
-
-interface HeaderProps {
-  onOpenCV: () => void;
-  theme: string;
-  toggleTheme: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onOpenCV, theme, toggleTheme }) => {
+const Header: React.FC<{ onOpenCV: () => void; theme: string; toggleTheme: () => void; }> = ({ onOpenCV, theme, toggleTheme }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t, language, toggleLanguage } = useLanguage();
+
+  const NAV_ITEMS = [
+    { label: t('nav.home'), href: '#home' },
+    { label: t('nav.about'), href: '#about' },
+    { label: t('nav.skills'), href: '#skills' },
+    { label: t('nav.projects'), href: '#projects' },
+    { label: t('nav.cv'), href: '#cv' },
+    { label: t('nav.contact'), href: '#contact' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,14 +26,13 @@ const Header: React.FC<HeaderProps> = ({ onOpenCV, theme, toggleTheme }) => {
   }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a để tự xử lý cuộn
+    e.preventDefault(); 
     
     if (href === '#cv') {
       onOpenCV();
     } else {
       const element = document.querySelector(href);
       if (element) {
-        // Tính toán vị trí cần cuộn đến, trừ đi chiều cao của header (khoảng 80px)
         const headerOffset = 80;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.scrollY - headerOffset;
@@ -47,7 +43,6 @@ const Header: React.FC<HeaderProps> = ({ onOpenCV, theme, toggleTheme }) => {
         });
       }
     }
-    // Đóng menu mobile sau khi nhấn
     setIsMobileMenuOpen(false);
   };
 
@@ -87,14 +82,23 @@ const Header: React.FC<HeaderProps> = ({ onOpenCV, theme, toggleTheme }) => {
           </nav>
           
           <div className="flex items-center gap-3 pl-2 border-l border-slate-200 dark:border-slate-700">
-             {/* Donate Button (Desktop) - Anchor Link */}
+             {/* Language Toggle */}
+             <button
+               onClick={toggleLanguage}
+               className="p-1.5 rounded-lg text-sm font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex items-center gap-1 min-w-[32px] justify-center"
+               title="Switch Language"
+             >
+               {language === 'vi' ? '🇻🇳' : '🇺🇸'}
+             </button>
+
+             {/* Donate Button (Desktop) */}
              <a
                 href="#donate"
                 onClick={(e) => handleNavClick(e, '#donate')}
                 className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white rounded-full text-xs font-bold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
              >
                 <Coffee size={14} /> 
-                <span>Donate</span>
+                <span>{t('nav.donate')}</span>
              </a>
 
             {/* Theme Toggle Button */}
@@ -110,7 +114,13 @@ const Header: React.FC<HeaderProps> = ({ onOpenCV, theme, toggleTheme }) => {
 
         {/* Mobile Menu & Theme Toggle */}
         <div className="flex items-center gap-3 md:hidden">
-           {/* Mobile Donate Icon */}
+           <button
+             onClick={toggleLanguage}
+             className="p-1.5 rounded-lg text-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+           >
+             {language === 'vi' ? '🇻🇳' : '🇺🇸'}
+           </button>
+
            <a
                 href="#donate"
                 onClick={(e) => handleNavClick(e, '#donate')}
@@ -155,7 +165,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenCV, theme, toggleTheme }) => {
              onClick={(e) => handleNavClick(e, '#donate')}
              className="px-6 py-3 text-pink-500 font-bold hover:bg-pink-50 dark:hover:bg-pink-900/20 transition-colors flex items-center gap-2"
           >
-             <Coffee size={18} /> Mời Cafe / Donate
+             <Coffee size={18} /> {t('nav.donate')}
           </a>
         </nav>
       </div>

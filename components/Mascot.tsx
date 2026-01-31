@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Music, Send, X, MessageSquare, User, Sparkles } from 'lucide-react';
-import { PERSONAL_INFO } from '../constants';
+import { Bot, Music, Send, X, MessageSquare } from 'lucide-react';
+import { PERSONAL_INFO, PROJECTS } from '../constants';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface MascotProps {
   isMusicPlaying: boolean;
@@ -14,13 +16,19 @@ interface Message {
 
 const Mascot: React.FC<MascotProps> = ({ isMusicPlaying }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, type: 'bot', text: "Xin chào! Mình là AI Assistant của Duy. Mình có thể giúp gì cho bạn?" }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { t, language } = useLanguage();
+
+  // Reset messages when language changes
+  useEffect(() => {
+    setMessages([
+        { id: 1, type: 'bot', text: t('mascot.greeting') }
+    ]);
+  }, [language, t]);
 
   // Auto scroll to bottom
   useEffect(() => {
@@ -39,7 +47,7 @@ const Mascot: React.FC<MascotProps> = ({ isMusicPlaying }) => {
     setTimeout(() => {
       setIsTyping(false);
       setMessages(prev => [...prev, { id: Date.now(), type: 'bot', text }]);
-    }, 800 + Math.random() * 500); // Random delay cho tự nhiên
+    }, 600 + Math.random() * 400); 
   };
 
   const processUserMessage = (text: string) => {
@@ -48,40 +56,83 @@ const Mascot: React.FC<MascotProps> = ({ isMusicPlaying }) => {
 
     const lowerText = text.toLowerCase();
 
-    // Logic xử lý từ khóa đơn giản
-    if (lowerText.includes('liên hệ') || lowerText.includes('email') || lowerText.includes('sđt') || lowerText.includes('facebook') || lowerText.includes('gặp')) {
+    // Language specific keywords
+    const isVi = language === 'vi';
+    
+    const contactKeywords = isVi 
+        ? ['liên hệ', 'liên lạc', 'tìm', 'gặp', 'email', 'gmail', 'sđt', 'số điện thoại', 'facebook', 'fb', 'zalo', 'nhắn tin', 'gọi', 'ở đâu']
+        : ['contact', 'email', 'gmail', 'phone', 'call', 'message', 'reach', 'find', 'facebook', 'zalo', 'address'];
+    
+    const skillKeywords = isVi
+        ? ['giỏi', 'kỹ năng', 'skill', 'công nghệ', 'biết gì', 'làm được gì', 'tech', 'stack', 'ngôn ngữ']
+        : ['skill', 'tech', 'stack', 'good at', 'expert', 'know', 'language'];
+    
+    const cvKeywords = isVi
+        ? ['cv', 'hồ sơ', 'resume', 'lý lịch', 'tải', 'download']
+        : ['cv', 'resume', 'download', 'pdf', 'profile'];
+    
+    const projectKeywords = isVi
+        ? ['dự án', 'project', 'sản phẩm', 'làm được những gì', 'app', 'web', 'demo']
+        : ['project', 'product', 'app', 'web', 'work', 'demo'];
+    
+    const funKeywords = isVi
+        ? ['nhạc', 'music', 'hát', 'bài hát', 'play', 'song']
+        : ['music', 'song', 'play', 'listen'];
+
+    const helloKeywords = isVi
+        ? ['chào', 'hi', 'hello', 'lô', 'hey']
+        : ['hi', 'hello', 'hey', 'greeting'];
+
+    if (contactKeywords.some(k => lowerText.includes(k))) {
         addBotMessage(
             <span>
-                Bạn có thể gửi email qua <a href={`mailto:${PERSONAL_INFO.email}`} className="text-brand-500 underline font-bold">{PERSONAL_INFO.email}</a> hoặc nhắn tin qua <a href={PERSONAL_INFO.facebook} target="_blank" className="text-brand-500 underline font-bold">Facebook</a> nhé!
+                {isVi ? "Để tìm hoặc liên hệ với Duy, bạn có các cách sau nè:" : "To contact Duy, you can use:"} <br/>
+                📧 Email: <a href={`mailto:${PERSONAL_INFO.email}`} className="text-brand-500 underline font-bold">{PERSONAL_INFO.email}</a> <br/>
+                💬 {isVi ? "Nhắn tin:" : "Message:"} <a href={PERSONAL_INFO.facebook} target="_blank" className="text-brand-500 underline font-bold">Facebook</a> {isVi ? "hoặc" : "or"} <a href={PERSONAL_INFO.zalo} target="_blank" className="text-brand-500 underline font-bold">Zalo</a>.
             </span>
         );
     } 
-    else if (lowerText.includes('giỏi') || lowerText.includes('kỹ năng') || lowerText.includes('skill') || lowerText.includes('công nghệ') || lowerText.includes('biết gì')) {
-        addBotMessage("Duy hiện đang tập trung mạnh vào Web Development (React, Node.js) và IoT (Arduino, ESP32). Cậu ấy thích kết hợp phần cứng và phần mềm!");
+    else if (skillKeywords.some(k => lowerText.includes(k))) {
+        addBotMessage(t('mascot.skill_reply'));
     }
-    else if (lowerText.includes('cv') || lowerText.includes('hồ sơ') || lowerText.includes('resume')) {
-        addBotMessage("Bạn có thể xem và tải CV trực tiếp bằng cách nhấn nút 'CV Online' trên thanh menu hoặc ở đầu trang web.");
+    else if (cvKeywords.some(k => lowerText.includes(k))) {
+        addBotMessage(
+            <span>
+                {t('mascot.cv_reply')} <br/>
+                👉 <button onClick={() => document.getElementById('cv-trigger')?.click()} className="text-brand-500 underline font-bold cursor-pointer">{isVi ? "Nhấn vào đây" : "Click here"}</button>
+            </span>
+        );
     }
-    else if (lowerText.includes('chào') || lowerText.includes('hi') || lowerText.includes('hello') || lowerText.includes('lô')) {
-        addBotMessage("Chào bạn! Chúc bạn một ngày tốt lành. Bạn cần mình giúp gì không?");
+    else if (helloKeywords.some(k => lowerText.includes(k))) {
+        addBotMessage(t('mascot.greeting'));
     }
-    else if (lowerText.includes('dự án') || lowerText.includes('project') || lowerText.includes('sản phẩm')) {
-        addBotMessage("Duy có nhiều dự án thú vị về Web và IoT. Bạn hãy kéo xuống phần 'Dự Án' để xem chi tiết nhé!");
+    else if (projectKeywords.some(k => lowerText.includes(k))) {
+        addBotMessage(
+            <div className="flex flex-col gap-2">
+                <span className="font-semibold">{isVi ? "Dưới đây là một số dự án tiêu biểu:" : "Here are some featured projects:"}</span>
+                <ul className="space-y-3 mt-1">
+                    {PROJECTS.map((p, idx) => (
+                        <li key={idx} className="bg-slate-100 dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                            <span className="font-bold block text-brand-600 dark:text-brand-400 text-xs">{isVi ? p.title : (p.title_en || p.title)}</span>
+                            <span className="text-[10px] opacity-90 block leading-snug mt-1">{isVi ? p.description : (p.description_en || p.description)}</span>
+                        </li>
+                    ))}
+                </ul>
+                <span className="mt-1 text-xs italic opacity-75">{isVi ? "Bạn kéo xuống mục Dự án để xem demo nhé! 🚀" : "Scroll down to Projects section for demos! 🚀"}</span>
+            </div>
+        );
     }
-    else if (lowerText.includes('nhạc') || lowerText.includes('music') || lowerText.includes('hát')) {
-        addBotMessage("Web có tích hợp trình phát nhạc đó! Bạn nhấn vào biểu tượng cài đặt (bánh răng) ở cạnh phải để bật nhạc nha 🎧");
+    else if (funKeywords.some(k => lowerText.includes(k))) {
+        addBotMessage(t('mascot.music_reply'));
     }
-    else if (lowerText.includes('chuyện vui') || lowerText.includes('hài') || lowerText.includes('joke')) {
-         const jokes = [
-             "Tại sao lập trình viên không thích thiên nhiên? Vì nó có quá nhiều bugs.",
-             "Một câu SQL bước vào quán bar, đi đến hai cái bàn và hỏi: 'Tôi có thể tham gia (JOIN) không?'",
-             "Hardware: Phần bạn có thể đá vào. Software: Phần bạn chỉ có thể chửi.",
-             "Code chạy là được, đừng đụng vào nếu không muốn nó nổ tung 💥"
-         ];
-         addBotMessage(jokes[Math.floor(Math.random() * jokes.length)]);
+    else if (lowerText.includes('thank') || lowerText.includes('cảm ơn')) {
+        addBotMessage(t('mascot.thanks_reply'));
+    }
+    else if (lowerText.includes('bot') || lowerText.includes('ai')) {
+        addBotMessage(t('mascot.bot_reply'));
     }
     else {
-        addBotMessage("Xin lỗi, mình chưa hiểu ý bạn lắm. Bạn thử hỏi về 'Kỹ năng', 'Liên hệ' hoặc 'Dự án' xem sao?");
+        addBotMessage(t('mascot.fallback'));
     }
   };
 
@@ -96,6 +147,13 @@ const Mascot: React.FC<MascotProps> = ({ isMusicPlaying }) => {
   const handleOptionClick = (option: string) => {
     processUserMessage(option);
   };
+
+  const quickOptions = [
+      t('mascot.quick_contact'),
+      t('mascot.quick_cv'),
+      t('mascot.quick_skill'),
+      t('mascot.quick_fun')
+  ];
 
   return (
     <>
@@ -131,7 +189,7 @@ const Mascot: React.FC<MascotProps> = ({ isMusicPlaying }) => {
                     {msg.type === 'bot' && (
                         <div className="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center mr-2 mt-1 flex-shrink-0 text-xs font-bold border border-brand-200">AI</div>
                     )}
-                    <div className={`max-w-[80%] p-3 rounded-2xl text-sm shadow-sm break-words ${
+                    <div className={`max-w-[85%] p-3 rounded-2xl text-sm shadow-sm break-words leading-relaxed ${
                         msg.type === 'user' 
                         ? 'bg-brand-500 text-white rounded-br-none' 
                         : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-bl-none border border-slate-100 dark:border-slate-700'
@@ -156,7 +214,7 @@ const Mascot: React.FC<MascotProps> = ({ isMusicPlaying }) => {
         {/* Quick Actions (Suggestions) */}
         <div className="px-3 py-2 bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 flex-shrink-0 overflow-x-auto no-scrollbar">
              <div className="flex gap-2">
-                 {['Liên hệ với Duy?', 'Duy giỏi gì nhất?', 'CV của Duy?', 'Kể chuyện vui đi!'].map(opt => (
+                 {quickOptions.map(opt => (
                      <button 
                         key={opt}
                         onClick={() => handleOptionClick(opt)}
@@ -175,7 +233,7 @@ const Mascot: React.FC<MascotProps> = ({ isMusicPlaying }) => {
                 type="text" 
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Nhập tin nhắn..."
+                placeholder={t('mascot.placeholder')}
                 className="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-sm rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all"
             />
             <button 
@@ -193,14 +251,6 @@ const Mascot: React.FC<MascotProps> = ({ isMusicPlaying }) => {
         onClick={() => setIsOpen(!isOpen)}
         className={`relative cursor-pointer group transition-all duration-300 hover:scale-110 active:scale-95`}
       >
-        {/* Tooltip if closed */}
-        {!isOpen && (
-             <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 whitespace-nowrap bg-white dark:bg-slate-800 px-3 py-1.5 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                 Chat với mình nhé!
-                 <div className="absolute right-full top-1/2 -translate-y-1/2 -mr-1 border-4 border-transparent border-r-white dark:border-r-slate-800"></div>
-             </div>
-        )}
-
         {/* Glow effect */}
         <div className="absolute inset-0 bg-brand-500/30 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
         

@@ -1,18 +1,22 @@
+
 import React from 'react';
 import { FOCUS_AREAS } from '../constants';
 import ScrollReveal from './ScrollReveal';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const FocusAreas: React.FC = () => {
+  const { t, language } = useLanguage();
+
   return (
     <section className="py-20 bg-slate-50 dark:bg-slate-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <ScrollReveal>
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3">
-              Lĩnh Vực <span className="text-brand-500">Nghiên Cứu</span>
+              {t('focus.title')} <span className="text-brand-500">{t('focus.titleHighlight')}</span>
             </h2>
             <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm">
-              Những mảng công nghệ mình đang tập trung phát triển và theo đuổi.
+              {t('focus.subtitle')}
             </p>
           </div>
         </ScrollReveal>
@@ -33,10 +37,10 @@ const FocusAreas: React.FC = () => {
 
                   {/* Content */}
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-500 transition-colors">
-                    {area.title}
+                    {language === 'vi' ? area.title : (area.title_en || area.title)}
                   </h3>
                   <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-                    {area.description}
+                    {language === 'vi' ? area.description : (area.description_en || area.description)}
                   </p>
 
                   {/* Decorative line */}

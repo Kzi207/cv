@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { TIMELINE } from '../constants';
 import { Briefcase, Code, GraduationCap, Star } from 'lucide-react';
 import ScrollReveal from './ScrollReveal';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const getIcon = (type: string) => {
   switch (type) {
@@ -14,16 +16,18 @@ const getIcon = (type: string) => {
 };
 
 const Timeline: React.FC = () => {
+  const { t, language } = useLanguage();
+  
   return (
     <section className="py-16 bg-slate-50 dark:bg-slate-900/50 transition-colors duration-300">
       <div className="container mx-auto px-4 md:px-6">
         <ScrollReveal>
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">
-              Lộ Trình <span className="text-brand-500">Phát Triển</span>
+              {t('timeline.title')} <span className="text-brand-500">{t('timeline.titleHighlight')}</span>
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm">
-              Hành trình học tập và mục tiêu tương lai.
+              {t('timeline.subtitle')}
             </p>
           </div>
         </ScrollReveal>
@@ -56,14 +60,18 @@ const Timeline: React.FC = () => {
                     <span className="inline-block px-2 py-1 rounded bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-xs font-bold mb-2">
                       {item.year}
                     </span>
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{item.title}</h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">{item.description}</p>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+                      {language === 'vi' ? item.title : (item.title_en || item.title)}
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm">
+                      {language === 'vi' ? item.description : (item.description_en || item.description)}
+                    </p>
                   </div>
                 </div>
 
                 {/* Center Icon */}
                 <div className="absolute left-0 md:left-1/2 md:-translate-x-1/2 flex items-center justify-center w-6 h-6 rounded-full bg-brand-500 text-white shadow-lg shadow-brand-500/30 z-10">
-                  {getIcon(item.icon)}
+                  {getIcon(item.icon || 'star')}
                 </div>
 
                 {/* Empty Space for Grid */}

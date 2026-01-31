@@ -1,6 +1,8 @@
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Settings, X, Moon, Sun, Music, Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, BarChart2 } from 'lucide-react';
+import { Settings, X, Moon, Sun, Music, Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, BarChart2, Globe } from 'lucide-react';
 import { PLAYLIST } from '../constants';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SettingsPanelProps {
   theme: string;
@@ -21,6 +23,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hasOpenedOnce, setHasOpenedOnce] = useState(false);
+  const { t, language, toggleLanguage } = useLanguage();
   
   // Audio State
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -32,7 +35,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
   // --- OPTIMIZED AUDIO LOGIC ---
   
-  // Handle Play/Pause with safety check for race conditions
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -52,15 +54,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
     playAudio();
   }, [isPlaying, currentTrackIndex]);
 
-  // Handle Volume changes
   useEffect(() => {
     if (audioRef.current) {
         audioRef.current.volume = isMuted ? 0 : volume;
     }
   }, [volume, isMuted]);
 
-  // Optimized Time Update: Only update state if progress changes significantly (>0.5%)
-  // This reduces re-renders significantly compared to updating on every tick
   const handleTimeUpdate = useCallback(() => {
     if (audioRef.current) {
         const current = audioRef.current.currentTime;
@@ -108,7 +107,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         preload="auto"
       />
 
-      {/* Global Backdrop */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-[49] transition-opacity duration-300"
@@ -116,21 +114,18 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         ></div>
       )}
 
-      {/* Main Container */}
       <div className="fixed top-1/2 right-0 z-[50] -translate-y-1/2 flex items-start pointer-events-none">
         
-        {/* Toggle Button */}
         {!isOpen && (
           <div className="relative group pointer-events-auto">
              <div className={`absolute right-full top-1/2 -translate-y-1/2 mr-3 whitespace-nowrap bg-brand-600 text-white text-xs px-3 py-1.5 rounded-lg shadow-lg arrow-right transition-opacity duration-300 ${hasOpenedOnce ? 'opacity-0 group-hover:opacity-100' : 'opacity-100 animate-bounce-horizontal'}`}>
-                <span className="font-bold">Cài đặt & Playlist</span>
+                <span className="font-bold">{t('settings.title')}</span>
                 <div className="absolute top-1/2 right-[-4px] -translate-y-1/2 w-2 h-2 bg-brand-600 rotate-45"></div>
              </div>
 
             <button
               onClick={handleOpen}
               className="bg-white dark:bg-slate-800 p-3 rounded-l-xl shadow-lg border-y border-l border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-brand-500 hover:pl-4 transition-all duration-300 flex flex-col gap-1 items-center justify-center min-w-[50px]"
-              title="Nhạc & Cài đặt"
             >
               <div className="relative">
                 <Settings size={22} className={`transition-transform duration-700 ${isPlaying ? 'rotate-180' : ''}`} />
@@ -139,16 +134,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </div>
         )}
 
-        {/* Panel Content */}
         <div 
           className={`bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-l border-slate-200 dark:border-slate-700 shadow-2xl h-[90vh] md:h-[85vh] w-80 rounded-l-2xl transform transition-transform duration-300 ease-in-out flex flex-col pointer-events-auto ${
             isOpen ? 'translate-x-0' : 'translate-x-full fixed right-0'
           }`}
         >
-          {/* Header */}
           <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50 rounded-tl-2xl flex-shrink-0">
             <h3 className="font-bold text-lg text-slate-800 dark:text-white flex items-center gap-2">
-              <Settings size={18} /> Cài đặt chung
+              <Settings size={18} /> {t('settings.title')}
             </h3>
             <button 
               onClick={() => setIsOpen(false)}
@@ -158,31 +151,42 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
             </button>
           </div>
 
-          {/* Body */}
           <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-6">
             
-            {/* Theme */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase text-slate-400 tracking-wider">Giao diện</h4>
+              <h4 className="text-xs font-bold uppercase text-slate-400 tracking-wider">{t('settings.theme')}</h4>
+              
+              {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
                 className="w-full flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700"
               >
                 <span className="text-slate-700 dark:text-slate-200 font-medium flex items-center gap-2">
                   {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
-                  {theme === 'dark' ? 'Chế độ Tối' : 'Chế độ Sáng'}
+                  {theme === 'dark' ? t('settings.darkMode') : t('settings.lightMode')}
                 </span>
                 <div className={`w-10 h-5 rounded-full relative transition-colors ${theme === 'dark' ? 'bg-brand-500' : 'bg-slate-300'}`}>
                   <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${theme === 'dark' ? 'left-6' : 'left-1'}`}></div>
                 </div>
               </button>
+
+              {/* Language Toggle */}
+              <button
+                onClick={toggleLanguage}
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700"
+              >
+                <span className="text-slate-700 dark:text-slate-200 font-medium flex items-center gap-2">
+                  <Globe size={18} />
+                  {t('settings.language')}
+                </span>
+                <span className="text-xl">{language === 'vi' ? '🇻🇳' : '🇺🇸'}</span>
+              </button>
             </div>
 
-            {/* Playlist */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold uppercase text-slate-400 tracking-wider">Danh sách phát</h4>
-                <span className="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-slate-500">{PLAYLIST.length} bài</span>
+                <h4 className="text-xs font-bold uppercase text-slate-400 tracking-wider">{t('settings.playlist')}</h4>
+                <span className="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-slate-500">{PLAYLIST.length} {t('settings.tracks')}</span>
               </div>
               
               <div className="space-y-2 max-h-[350px] overflow-y-auto pr-1 custom-scrollbar scroll-smooth">
@@ -227,11 +231,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
             </div>
           </div>
 
-          {/* Footer Player */}
           <div className="relative z-10 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)]">
              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 pointer-events-none"></div>
 
-             {/* Progress Bar */}
              <div className="absolute top-0 left-0 w-full h-1 bg-slate-100 dark:bg-slate-800 cursor-pointer group">
                 <div 
                   className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 group-hover:from-blue-400 group-hover:to-pink-400 transition-all duration-300 ease-linear"
@@ -246,7 +248,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
              </div>
 
              <div className="flex items-center gap-4 pt-2">
-                 {/* Spinning Disc */}
                  <div className={`relative w-14 h-14 flex-shrink-0 rounded-full shadow-lg border-2 border-slate-100 dark:border-slate-700 overflow-hidden ${isPlaying ? 'animate-spin-slow' : ''}`}>
                      <div className="absolute inset-0 bg-slate-900 flex items-center justify-center">
                          <div className="w-full h-full opacity-50 bg-[conic-gradient(var(--tw-gradient-stops))] from-slate-800 via-slate-700 to-slate-800"></div>
@@ -271,7 +272,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                  </div>
              </div>
 
-             {/* Controls */}
              <div className="flex items-center justify-between mt-4">
                  <div className="flex items-center gap-2 group">
                      <button onClick={() => setIsMuted(!isMuted)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">

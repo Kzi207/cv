@@ -1,5 +1,7 @@
+
 import React, { useState } from 'react';
 import { Coffee, X, Copy, Check, Heart } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface DonateWidgetProps {
   isOpen: boolean;
@@ -9,6 +11,7 @@ interface DonateWidgetProps {
 
 const DonateWidget: React.FC<DonateWidgetProps> = ({ isOpen, onClose, onOpen }) => {
   const [copied, setCopied] = useState(false);
+  const { t } = useLanguage();
 
   // QR Info
   const BANK_INFO = {
@@ -34,7 +37,7 @@ const DonateWidget: React.FC<DonateWidgetProps> = ({ isOpen, onClose, onOpen }) 
         <button
           onClick={onOpen}
           className="relative p-3 bg-gradient-to-r from-pink-500 to-rose-600 text-white rounded-full shadow-lg hover:shadow-pink-500/50 hover:scale-110 transition-all duration-300 flex items-center justify-center animate-bounce-slow"
-          title="Mời Cafe"
+          title={t('donateWidget.button')}
         >
           {/* Pulse Effect */}
           <span className="absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75 animate-ping"></span>
@@ -42,12 +45,12 @@ const DonateWidget: React.FC<DonateWidgetProps> = ({ isOpen, onClose, onOpen }) 
           <Coffee size={24} className="relative z-10 group-hover:rotate-12 transition-transform" />
           
           {/* Always visible text on Desktop, hidden on mobile */}
-          <span className="hidden md:block relative z-10 ml-2 font-bold text-sm pr-1">Donate</span>
+          <span className="hidden md:block relative z-10 ml-2 font-bold text-sm pr-1">{t('donateWidget.button')}</span>
         </button>
         
         {/* Tooltip for Mobile */}
         <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity md:hidden whitespace-nowrap pointer-events-none">
-          Mời Cafe
+          {t('donateWidget.button')}
         </div>
       </div>
 
@@ -69,10 +72,10 @@ const DonateWidget: React.FC<DonateWidgetProps> = ({ isOpen, onClose, onOpen }) 
                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
 
               <h3 className="font-bold text-xl flex items-center justify-center gap-2 relative z-10">
-                <Coffee size={24} /> Mời Duy Ly Cà Phê
+                <Coffee size={24} /> {t('donateWidget.title')}
               </h3>
               <p className="text-sm text-white/90 mt-2 relative z-10 flex items-center justify-center gap-1">
-                 Cảm ơn sự ủng hộ của bạn <Heart size={14} className="fill-current text-red-200" />
+                 {t('donateWidget.thanks')} <Heart size={14} className="fill-current text-red-200" />
               </p>
               <button 
                 onClick={onClose}
@@ -114,17 +117,17 @@ const DonateWidget: React.FC<DonateWidgetProps> = ({ isOpen, onClose, onOpen }) 
                           ? 'bg-green-500 text-white shadow-green-500/30 shadow-lg' 
                           : 'bg-slate-200 dark:bg-slate-700 hover:bg-brand-500 hover:text-white text-slate-600 dark:text-slate-300'
                       }`}
-                      title="Sao chép số tài khoản"
+                      title={t('donateWidget.copy')}
                     >
                       {copied ? <Check size={18} /> : <Copy size={18} />}
                     </button>
                  </div>
-                 {copied && <p className="text-xs text-green-500 font-medium animate-fade-in-up">Đã sao chép số tài khoản!</p>}
+                 {copied && <p className="text-xs text-green-500 font-medium animate-fade-in-up">{t('donateWidget.copied')}</p>}
               </div>
             </div>
             
             <div className="bg-slate-50 dark:bg-slate-950 p-3 text-center border-t border-slate-100 dark:border-slate-800">
-               <p className="text-[10px] text-slate-400">Mọi sự ủng hộ đều là động lực to lớn ❤️</p>
+               <p className="text-[10px] text-slate-400">{t('donateWidget.footer')}</p>
             </div>
           </div>
         </div>

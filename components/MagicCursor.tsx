@@ -1,8 +1,8 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 
 const MagicCursor: React.FC = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const followerRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false); // Only visible on movement to avoid glitch at start
 
@@ -15,11 +15,6 @@ const MagicCursor: React.FC = () => {
       setIsVisible(true);
       if (cursorRef.current) {
         cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-      }
-      if (followerRef.current) {
-         // Follower delay logic could be done with requestAnimationFrame for super smoothness
-         // but CSS transition is easier and performant enough here
-         followerRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       }
 
       // Check if hovering interactive elements
@@ -37,11 +32,11 @@ const MagicCursor: React.FC = () => {
     };
 
     const handleMouseDown = () => {
-       if (followerRef.current) followerRef.current.style.transform += ' scale(0.8)';
+       if (cursorRef.current) cursorRef.current.style.transform += ' scale(0.8) rotate(-15deg)';
     };
 
     const handleMouseUp = (e: MouseEvent) => {
-        if (followerRef.current) followerRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        if (cursorRef.current) cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
     };
 
     window.addEventListener('mousemove', moveCursor);
@@ -58,21 +53,17 @@ const MagicCursor: React.FC = () => {
   // Don't render on mobile (handled by media query in CSS largely, but good to have safeguard)
   return (
     <div className="hidden md:block pointer-events-none fixed inset-0 z-[9999]">
-      {/* Main Dot */}
+      {/* Main Image Cursor */}
       <div 
         ref={cursorRef}
-        className={`absolute top-0 left-0 w-2 h-2 bg-brand-500 rounded-full -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-      ></div>
-
-      {/* Trailing Circle */}
-      <div 
-        ref={followerRef}
-        className={`absolute top-0 left-0 border border-brand-500 rounded-full -translate-x-1/2 -translate-y-1/2 transition-all duration-100 ease-out flex items-center justify-center mix-blend-difference ${
-            isVisible ? 'opacity-100' : 'opacity-0'
-        } ${
-            isHovering ? 'w-12 h-12 bg-white/20 border-transparent backdrop-blur-[1px]' : 'w-8 h-8 bg-transparent'
-        }`}
-      ></div>
+        className={`absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <img 
+            src="https://img.icons8.com/doodle/96/rabbit.png" 
+            alt="Cute Rabbit Cursor"
+            className={`object-contain drop-shadow-md transition-all duration-300 ${isHovering ? 'w-12 h-12 rotate-12' : 'w-9 h-9'}`}
+        />
+      </div>
     </div>
   );
 };

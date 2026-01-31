@@ -1,11 +1,11 @@
+
 import { Project, Skill, Track, Education, TimelineItem, FocusArea } from './types';
 import { Cpu, Globe, Bot, Zap, Layout, Wifi } from 'lucide-react';
-
-
 
 export const PERSONAL_INFO = {
   name: "Lê Khánh Duy",
   title: "Sinh viên Cơ điện tử - CTUT",
+  title_en: "Mechatronics Student - CTUT",
   email: "kzi221107@gmail.com",
   phone: "0939 042 183",
   address: "Cần Thơ, Việt Nam",
@@ -13,24 +13,32 @@ export const PERSONAL_INFO = {
   facebook: "https://fb.com/kzi207",
   zalo: "https://zalo.me/0939042183",
   about: "Xin chào! Mình là Lê Khánh Duy, sinh viên năm nhất chuyên ngành Công nghệ Kỹ thuật Cơ điện tử tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT). Mình đam mê công nghệ, lập trình hệ thống và chế tạo. Mình luôn tìm kiếm cơ hội để học hỏi và tạo ra những sản phẩm thực tế hữu ích.",
-  goals: "Mục tiêu ngắn hạn: Nắm vững kiến thức đại cương và cơ sở ngành, phát triển kỹ năng lập trình nhúng và web. Mục tiêu dài hạn: Trở thành kỹ sư Cơ điện tử giỏi, tham gia các dự án IoT và tự động hóa chuyên nghiệp."
+  about_en: "Hello! I am Le Khanh Duy, a freshman majoring in Mechatronics Engineering Technology at Can Tho University of Technology (CTUT). I am passionate about technology, system programming, and manufacturing. I am always looking for opportunities to learn and create useful practical products.",
+  goals: "Mục tiêu ngắn hạn: Nắm vững kiến thức đại cương và cơ sở ngành, phát triển kỹ năng lập trình nhúng và web. Mục tiêu dài hạn: Trở thành kỹ sư Cơ điện tử giỏi, tham gia các dự án IoT và tự động hóa chuyên nghiệp.",
+  goals_en: "Short-term: Master general and fundamental knowledge, develop embedded and web programming skills. Long-term: Become a skilled Mechatronics engineer, participate in professional IoT and automation projects."
 };
 
 export const ABOUT_TABS = [
   {
     id: 'student',
     label: 'Sinh viên',
-    content: "Hiện là sinh viên năm nhất tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT). Mình đang tập trung xây dựng nền tảng toán học và tư duy lập trình vững chắc."
+    label_en: 'Student',
+    content: "Hiện là sinh viên năm nhất tại Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT). Mình đang tập trung xây dựng nền tảng toán học và tư duy lập trình vững chắc.",
+    content_en: "Currently a freshman at Can Tho University of Technology (CTUT). I am focusing on building a solid mathematical foundation and programming mindset."
   },
   {
     id: 'tech',
     label: 'Công nghệ',
-    content: "Đam mê IoT, Arduino và Web Development. Mình thích việc kết hợp phần cứng và phần mềm để tạo ra các hệ thống thông minh."
+    label_en: 'Tech',
+    content: "Đam mê IoT, Arduino và Web Development. Mình thích việc kết hợp phần cứng và phần mềm để tạo ra các hệ thống thông minh.",
+    content_en: "Passionate about IoT, Arduino, and Web Development. I enjoy combining hardware and software to create smart systems."
   },
   {
     id: 'hobbies',
     label: 'Sở thích',
-    content: "Ngoài coding, mình thích nghe nhạc Lofi, nghiên cứu linh kiện điện tử và đôi khi là chơi game để giải trí."
+    label_en: 'Hobbies',
+    content: "Ngoài coding, mình thích nghe nhạc Lofi, nghiên cứu linh kiện điện tử và đôi khi là chơi game để giải trí.",
+    content_en: "Besides coding, I like listening to Lofi music, researching electronic components, and sometimes playing games for entertainment."
   }
 ];
 
@@ -38,21 +46,27 @@ export const FOCUS_AREAS: FocusArea[] = [
   {
     id: 'iot',
     title: "IoT & Embedded",
+    title_en: "IoT & Embedded",
     description: "Lập trình vi điều khiển (ESP32, Arduino), thiết kế mạch và xây dựng hệ thống Smart Home kết nối vạn vật.",
+    description_en: "Microcontroller programming (ESP32, Arduino), circuit design, and building IoT Smart Home systems.",
     icon: Wifi,
     color: "from-cyan-500 to-blue-500"
   },
   {
     id: 'web',
     title: "Web Development",
+    title_en: "Web Development",
     description: "Xây dựng giao diện web hiện đại (React, Tailwind), tối ưu UX/UI và phát triển Back-end (Node.js) cho các ứng dụng điều khiển.",
+    description_en: "Building modern web interfaces (React, Tailwind), optimizing UX/UI, and developing Back-end (Node.js) for control applications.",
     icon: Globe,
     color: "from-violet-500 to-purple-500"
   },
   {
     id: 'automation',
     title: "Automation & AI",
+    title_en: "Automation & AI",
     description: "Tự động hóa quy trình với Python, tích hợp Chatbot AI hỗ trợ và xử lý dữ liệu cảm biến thông minh.",
+    description_en: "Process automation with Python, integrating AI Chatbots for support and smart sensor data processing.",
     icon: Bot,
     color: "from-orange-400 to-red-500"
   }
@@ -80,27 +94,32 @@ export const SKILLS: Skill[] = [
 export const PROJECTS: Project[] = [
   {
     title: "Profile & CV Cá Nhân",
+    title_en: "Personal Profile & CV",
     description: "Website giới thiệu thông tin cá nhân, tích hợp CV điện tử và các tiện ích giải trí. Giao diện hiện đại, responsive.",
+    description_en: "Personal information introduction website, integrated digital CV and entertainment utilities. Modern, responsive interface.",
     tags: ["React", "Tailwind CSS", "UI/UX"],
     github: "https://github.com/kzi20007/profile",
-    link: "#",
-    image: "https://picsum.photos/600/400?random=10"
+    link: "https://kzii.site",
+    image: "https://i.postimg.cc/q7w1Kpwq/Chat-GPT-Image-19-34-15-31-thg-1-2026.png"
   },
   {
     title: "Hệ thống Điểm rèn luyện",
+    title_en: "Training Point System",
     description: "Hệ thống hỗ trợ chấm điểm rèn luyện và điểm danh cho sinh viên, giúp quản lý thông tin hiệu quả và chính xác.",
+    description_en: "System to support training point grading and attendance for students, helping manage information effectively and accurately.",
     tags: ["Web App", "Database", "Management"],
     github: "https://github.com/kzi207",
-    link: "#",
-    image: "https://picsum.photos/600/400?random=11"
+    link: "https://dd.kzii.site",
+    image: "https://i.postimg.cc/x1S5FXFn/Chat-GPT-Image-19-29-54-31-thg-1-2026.png"
   },
   {
     title: "Chatbot Messenger",
+    title_en: "Messenger Chatbot",
     description: "Chatbot tự động trả lời tin nhắn trên nền tảng Facebook Messenger, hỗ trợ tương tác và giải đáp thắc mắc cơ bản.",
+    description_en: "Chatbot automatically responds to messages on Facebook Messenger platform, supporting basic interaction and Q&A.",
     tags: ["Node.js", "Facebook API", "AI"],
     github: "https://github.com/Kzi207/bot-mess-ts.git",
-    link: "#",
-    image: "https://picsum.photos/600/400?random=12"
+    image: "https://i.postimg.cc/sD39pkBj/Chat-GPT-Image-19-38-42-31-thg-1-2026.png"
   }
 ];
 
@@ -108,8 +127,10 @@ export const EDUCATION: Education[] = [
   {
     school: "Đại học Kỹ thuật - Công nghệ Cần Thơ (CTUT)",
     degree: "Kỹ sư Công nghệ Kỹ thuật Cơ điện tử",
+    degree_en: "Engineer of Mechatronics Engineering Technology",
     year: "2025 - 2030 (Dự kiến)",
-    description: "Sinh viên năm nhất. Tích cực tham gia các hoạt động nghiên cứu và phong trào đoàn hội."
+    description: "Sinh viên năm nhất. Tích cực tham gia các hoạt động nghiên cứu và phong trào đoàn hội.",
+    description_en: "Freshman. Actively participating in research activities and union movements."
   }
 ];
 
